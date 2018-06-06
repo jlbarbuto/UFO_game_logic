@@ -128,7 +128,21 @@ function spotted(){
             });
         }
     }else{
-        console.log("The aliens have spotted you! What's the plan?");
+        console.log("The aliens have spotted you! And they look pissed... What's the plan?");
+        inquirer.prompt([
+            {
+                type: "list",
+                message: "Will you take the offense and start a fight or attempt to charm your way into their good graces?",
+                choices: ["Fight", "Negotiate"],
+                name: "usrDecision"
+            }
+        ]).then(function(response){
+            if (response.usrDecision === "Fight"){
+                confrontation();
+            }else{
+                negotiate();
+            }
+        });
     };
 };
 
