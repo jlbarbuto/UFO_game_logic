@@ -58,11 +58,6 @@ function preExpedition(){
             name: "armorChoice"
         }
     ]).then(function(response){
-        console.log("stealth is " + stealth);
-        console.log("defense is " + defense);
-        console.log("offense is " + offense);
-        console.log("charm is " + charm);
-
         var usrArmor = parseInt(response.armorChoice);
         var usrWeapons = parseInt(response.weaponsChoice);
         weapons += usrWeapons;
@@ -70,11 +65,111 @@ function preExpedition(){
         armor += usrArmor;
 
         calcStats();
-        outcome();
+        scene1();
     });
 };
 
 preExpedition();
+
+function scene1(){
+    inquirer.prompt([
+        {
+            type: "list",
+            message: "Your team comes across a river. What do you do?",
+            choices: ["Find a way around delaying the party", "Ford the river cuasing a wet and irritated party"],
+            name: "riverChoice"
+        }
+    ]).then(function(response){
+        if (response.riverChoice === "Find a way around delaying the party"){
+            comfort += 10;
+            timeOfDay += 30;
+            console.log("Luckily, there's a bridge about a mile south! Unluckily, you had to make is past the troll. The team spends an extra 3 hours getting across.");
+        }else{
+            comfort -= 30;
+            console.log("The team bravely trudges through the river and comes out sopping wet, heavy, and cold. Luckily, no time was wasted and no monsters were encountered!");
+        };
+        scene2();
+    })
+}
+
+function scene2(){
+    inquirer.prompt([
+        {
+            type: "list",
+            message: "Directly in the path appears a mysterious, glowing box. What to do?!",
+            choices: ["Open the box! It could hold a game winning tool!", "Leave it alone. It smells funny."],
+            name: "boxChoice"
+        }
+    ]).then(function(response){
+        if (response.boxChoice === "Open the box! It could hold a game winning tool!"){
+            var rand = Math.rand();
+            if (rand<.25){
+                console.log("Ooo! Google translate! This might help us talk to any foreigners we might find.");
+                tools += 50;
+                comfort += 10;
+            }else if (rand<.5){
+                console.log("Ooo! A nifty book of recipies! This might give us a casserole to offer any new friends we might find.");
+                tools += 20;
+                comfort += 10;
+            }else if (rand<.75){
+                console.log("Ooo! ")
+
+            }else{
+                console.log("Oh boy. A neuralyzer. Your team spends an hour trying to remember where they're headed.");
+                comfort -= 20;
+                timeOfDay -= 10;
+                charm -= 30;
+            }
+            console.log("Luckily, there's a bridge about a mile south! Unluckily, you had to make is past the troll. The team spends an extra 3 hours getting across.");
+        }else{
+            comfort -= 30;
+            console.log("The team bravely trudges through the river and comes out sopping wet, heavy, and cold. Luckily, no time was wasted and no monsters were encountered!");
+        };
+        scene3();
+    })
+}
+
+function scene3(){
+    inquirer.prompt([
+        {
+            type: "list",
+            message: "Your team comes across a river. What do you do?",
+            choices: ["Find a way around delaying the party", "Ford the river cuasing a wet and irritated party"],
+            name: "riverChoice"
+        }
+    ]).then(function(response){
+        if (response.riverChoice === "Find a way around delaying the party"){
+            comfort += 10;
+            timeOfDay += 30;
+            console.log("Luckily, there's a bridge about a mile south! Unluckily, you had to make is past the troll. The team spends an extra 3 hours getting across.");
+        }else{
+            comfort -= 30;
+            console.log("The team bravely trudges through the river and comes out sopping wet, heavy, and cold. Luckily, no time was wasted and no monsters were encountered!");
+        };
+        scene4();
+    })
+}
+
+function scene4(){
+    inquirer.prompt([
+        {
+            type: "list",
+            message: "Your team comes across a river. What do you do?",
+            choices: ["Find a way around delaying the party", "Ford the river cuasing a wet and irritated party"],
+            name: "riverChoice"
+        }
+    ]).then(function(response){
+        if (response.riverChoice === "Find a way around delaying the party"){
+            comfort += 10;
+            timeOfDay += 30;
+            console.log("Luckily, there's a bridge about a mile south! Unluckily, you had to make is past the troll. The team spends an extra 3 hours getting across.");
+        }else{
+            comfort -= 30;
+            console.log("The team bravely trudges through the river and comes out sopping wet, heavy, and cold. Luckily, no time was wasted and no monsters were encountered!");
+        };
+        outcome();
+    })
+}
 
 function outcome(){
     var rand = Math.random();
