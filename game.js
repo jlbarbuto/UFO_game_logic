@@ -7,22 +7,11 @@ var teamOffense = 60;
 var teamCharm = 40;
 
 var weight = 10;
-var weightPer = 0.5;
-
 var comfort = 10;
-var comfortPer = 0.5;
-
 var armor = 10;
-var armorPer = 0.5;
-
 var weapons = 10;
-var weaponsPer = 0.5;
-
 var tools = 10;
-var toolsPer = 0.5;
-
-var timeOfDay = 30;
-var timeOfDayPer = 0.5;
+var timeOfDay = 10;
 
 var stealth = 0;
 var defense = 0;
@@ -30,10 +19,10 @@ var offense = 0;
 var charm = 0;
 
 function calcStats(){
-    stealth = (-weight+timeOfDay+comfort+teamStealth)/100;
-    defense = (armor+comfort+teamDefense)/100;
-    offense = (weapons+comfort+teamDefense)/100;
-    charm = (tools+comfort+teamCharm)/100;
+    stealth = (-weight-timeOfDay+comfort+teamStealth)/100;
+    defense = (armor+comfort+teamDefense-timeOfDay)/100;
+    offense = (weapons+comfort+teamDefense-timeOfDay)/100;
+    charm = (tools+comfort+teamCharm-timeOfDay)/100;
 
     console.log("stealth is " + stealth);
     console.log("defense is " + defense);
@@ -82,12 +71,13 @@ function scene1(){
     ]).then(function(response){
         if (response.riverChoice === "Find a way around delaying the party"){
             comfort += 10;
-            timeOfDay += 30;
+            timeOfDay += 10;
             console.log("Luckily, there's a bridge about a mile south! Unluckily, you had to make is past the troll. The team spends an extra 3 hours getting across.");
         }else{
             comfort -= 30;
             console.log("The team bravely trudges through the river and comes out sopping wet, heavy, and cold. Luckily, no time was wasted and no monsters were encountered!");
         };
+        calcStats();
         scene2();
     })
 }
@@ -102,7 +92,7 @@ function scene2(){
         }
     ]).then(function(response){
         if (response.boxChoice === "Open the box! It could hold a game winning tool!"){
-            var rand = Math.rand();
+            var rand = Math.random();
             if (rand<.25){
                 console.log("Ooo! Google translate! This might help us talk to any foreigners we might find.");
                 tools += 50;
@@ -112,40 +102,39 @@ function scene2(){
                 tools += 20;
                 comfort += 10;
             }else if (rand<.75){
-                console.log("Ooo! ")
-
+                console.log("Ooo! A small beetle. Not sure how this is helpful...");
             }else{
                 console.log("Oh boy. A neuralyzer. Your team spends an hour trying to remember where they're headed.");
                 comfort -= 20;
-                timeOfDay -= 10;
+                timeOfDay += 20;
                 charm -= 30;
             }
-            console.log("Luckily, there's a bridge about a mile south! Unluckily, you had to make is past the troll. The team spends an extra 3 hours getting across.");
         }else{
-            comfort -= 30;
-            console.log("The team bravely trudges through the river and comes out sopping wet, heavy, and cold. Luckily, no time was wasted and no monsters were encountered!");
+            console.log("The team leaves the box alone. Everyone will wonder what would have happened forever.");
         };
+        calcStats();
         scene3();
-    })
+    });
 }
 
 function scene3(){
     inquirer.prompt([
         {
             type: "list",
-            message: "Your team comes across a river. What do you do?",
-            choices: ["Find a way around delaying the party", "Ford the river cuasing a wet and irritated party"],
-            name: "riverChoice"
+            message: "A fork in the road! Which way?",
+            choices: ["Head left toward the creepy forest", "Head straight to the steep slope", "Head right toward the sinister mountain"],
+            name: "forkChoice"
         }
     ]).then(function(response){
-        if (response.riverChoice === "Find a way around delaying the party"){
-            comfort += 10;
-            timeOfDay += 30;
-            console.log("Luckily, there's a bridge about a mile south! Unluckily, you had to make is past the troll. The team spends an extra 3 hours getting across.");
+        if (stealth>.5){
+            console.log("Your team ventures onward with very little interference.");
+        }else if (weapons>.5){
+            console.log("Your team ventures onward obliterating the dense bush they find around the corner.");
+        }else if(armor>.5){
+            console.log("Your team ventures onward and trips across some roots (how embarassing). Luckily, no one was hurt.");
         }else{
-            comfort -= 30;
-            console.log("The team bravely trudges through the river and comes out sopping wet, heavy, and cold. Luckily, no time was wasted and no monsters were encountered!");
-        };
+            console.log("Your team ventures forward narrowly avoiding a catastrophic trap of roots and bushes.")
+        }
         scene4();
     })
 }
@@ -154,24 +143,44 @@ function scene4(){
     inquirer.prompt([
         {
             type: "list",
-            message: "Your team comes across a river. What do you do?",
-            choices: ["Find a way around delaying the party", "Ford the river cuasing a wet and irritated party"],
-            name: "riverChoice"
+            message: "Homebase call and asks if you need any reienforcements. Stock up on anything?",
+            choices: ["We need more weapons", "We need more armor", "We need more camoflauge", "We don't want to waste any more time"],
+            name: "backupChoice"
         }
     ]).then(function(response){
-        if (response.riverChoice === "Find a way around delaying the party"){
-            comfort += 10;
-            timeOfDay += 30;
-            console.log("Luckily, there's a bridge about a mile south! Unluckily, you had to make is past the troll. The team spends an extra 3 hours getting across.");
+        if (response.backupChoice === "We need more weapons"){
+            weapons += 30;
+            timeOfDay += 20;
+            console.log("Homebase sends a few more weapons to the team. Team waits for delivery.");
+        }else if (response.backupChoice === "We need more armor"){
+            armor += 30;
+            timeOfDay += 20;
+            console.log("Homebase sends a more armor to the team. Team waits for delivery.");
+        }else if (response.backupChoice === "We need more camoflauge"){
+            comfort += 30;
+            timeOfDay += 20;
+            console.log("Homebase sends camoflauge to the team. Team waits for delivery.");
         }else{
-            comfort -= 30;
-            console.log("The team bravely trudges through the river and comes out sopping wet, heavy, and cold. Luckily, no time was wasted and no monsters were encountered!");
+            console.log("The team bravely continues on without any additional help. No delays here!");
         };
+        calcStats();
         outcome();
-    })
+    });
 }
 
 function outcome(){
+    if (stealth>0.9){
+        stealth = 0.9;
+    }
+    if (defense>0.9){
+        defense = 0.9;
+    }
+    if (charm>0.9){
+        charm = 0.9;
+    }
+    if (offense>0.9){
+        offense = 0.9;
+    }
     var rand = Math.random();
     console.log(rand);
     if (rand>0.1){
@@ -200,8 +209,6 @@ function anythingThere(){
 
 function spotted(){
     var rand = Math.random();
-    console.log(rand);
-    console.log(stealth);
     if (rand>.1){
         if(stealth>rand){
             console.log("Looks like you guys are flying under the radar. Snoop around undetected. Report back with cool photos and evidence!");
