@@ -1,10 +1,10 @@
 var inquirer = require("inquirer");
 
-var team = "Avengers";
-var teamStealth = 20;
-var teamDefense = 60;
-var teamOffense = 60;
-var teamCharm = 40;
+var team = "";
+var teamStealth = 0;
+var teamDefense = 0;
+var teamOffense = 0;
+var teamCharm = 0;
 
 var weight = 10;
 var comfort = 10;
@@ -32,7 +32,76 @@ function calcStats(){
 
 calcStats()
 
-function preExpedition(){
+$("#avenge").click(function(){
+    team = "The Avengers";
+    teamStealth = 10;
+    teamDefense = 30;
+    teamOffense = 40;
+    teamCharm = 20;
+    chooseWeapons();
+});
+
+$("#justice").click(function(){
+    team = "The Justice League";
+    teamStealth = 20;
+    teamDefense = 40;
+    teamOffense = 30;
+    teamCharm = 10;
+    chooseWeapons();
+});
+
+$("#super").click(function(){
+    team = "The Supernatural Duo";
+    teamStealth = 40;
+    teamDefense = 20;
+    teamOffense = 10;
+    teamCharm = 30;
+    chooseWeapons();
+});
+
+$("#ghost").click(function(){
+    team = "The Ghostbusters";
+    teamStealth = 30;
+    teamDefense = 10;
+    teamOffense = 20;
+    teamCharm = 40;
+    chooseWeapons();
+});
+
+function chooseWeapons(){
+    $(".jbGame").html(
+        `<h1 class="action-title text-center">How many weapons will ${team} take on their journey?</h1>
+        <button class="choice" id="w1">1</button>
+        <button class="choice" id="w2">2</button>
+        <button class="choice" id="w3">3</button>
+        <button class="choice" id="w4">4</button>`
+    );
+
+    $("#w1").click(function(){
+        weapons += 1;
+        weight += 1;
+        chooseArmor();
+    });
+
+    $("#w2").click(function(){
+        weapons += 2;
+        weight += 2;
+        chooseArmor();
+    });
+
+    $("#w3").click(function(){
+        weapons += 3;
+        weight += 3;
+        chooseArmor();
+    });
+
+    $("#w4").click(function(){
+        weapons += 4;
+        weight += 4;
+        chooseArmor();
+    });
+
+
     inquirer.prompt([
         {
             type: "list",
