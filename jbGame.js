@@ -198,26 +198,30 @@ function scene2(){
         var rand = Math.random();
         console.log(rand);
         if (rand<.25){
-            $("jbGame").html(
+            console.log("hello1");
+            $(".jbGame").html(
                 `<h1 class="action-title text-center">Ooo! Google translate! This might help us talk to any foreigners we might find.<h1>
                 <button class="continue">Continue</button>`
             );
             tools += 50;
             uncomfort -= 10;
         }else if (rand<.5){
-            $("jbGame").html(
+            console.log("hello2");
+            $(".jbGame").html(
                 `<h1 class="action-title text-center">Ooo! A nifty book of recipies! This might give us a casserole to offer any new friends we might find.<h1>
                 <button class="continue">Continue</button>`
             );
             tools += 30;
             uncomfort -= 10;
         }else if (rand<.75){
-            $("jbGame").html(
+            console.log("hello3");
+            $(".jbGame").html(
                 `<h1 class="action-title text-center">Ooo! A small beetle. Not sure how this is helpful....<h1>
                 <button class="continue">Continue</button>`
             );
         }else{
-            $("jbGame").html(
+            console.log("hello4");
+            $(".jbGame").html(
                 `<h1 class="action-title text-center">Oh boy. A neuralyzer. Your team spends an hour trying to remember where they're headed.<h1>
                 <button class="continue">Continue</button>`
             );
@@ -241,56 +245,74 @@ function scene2(){
     });
 }
 
-// function scene3(){
-//     inquirer.prompt([
-//         {
-//             type: "list",
-//             message: "A fork in the road! Which way?",
-//             choices: ["Head left toward the creepy forest", "Head straight to the steep slope", "Head right toward the sinister mountain"],
-//             name: "forkChoice"
-//         }
-//     ]).then(function(response){
-//         if (stealth>.5){
-//             console.log("Your team ventures onward with very little interference.");
-//         }else if (weapons>.5){
-//             console.log("Your team ventures onward obliterating the dense bush they find around the corner.");
-//         }else if(armor>.5){
-//             console.log("Your team ventures onward and trips across some roots (how embarassing). Luckily, no one was hurt.");
-//         }else{
-//             console.log("Your team ventures forward narrowly avoiding a catastrophic trap of roots and bushes.")
-//         }
-//         scene4();
-//     })
-// }
+function scene3(){
+    $(".jbGame").html(
+        `<h1 class="action-title text-center">${team} sees a fork in the road a ways in the distance. Which way do you go?</h1>
+        <button class="choice" id="f1">Head left toward the creepy forest.<button>
+        <button class="choice" id="f2">Head straight to the steep slope.</button>
+        <button class="choice" id="f3">Head left to toward the sinister mountain.</button>`
+    );
+    if (stealth>.5){
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">Your team ventures onward with very little interference.</h1>
+            <button class="continue">Continue</button>`
+        );
+        $(".continue").click(function(){
+            scene4();
+        });
+    }else if (weapons>.5){
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">Your team ventures onward obliterating the dense bush they find around the corner.</h1>
+            <button class="continue">Continue</button>`
+        );
+        $(".continue").click(function(){
+            scene4();
+        });
+    }else if(armor>.5){
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">Your team ventures onward and trips across some roots (how embarassing). Luckily, no one was hurt.</h1>
+            <button class="continue">Continue</button>`
+        );
+        $(".continue").click(function(){
+            scene4();
+        });
+    }else{
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">Your team ventures forward narrowly avoiding a catastrophic trap of roots and bushes.</h1>
+            <button class="continue">Continue</button>`
+        );
+        $(".continue").click(function(){
+            scene4();
+        });
+    }
+}
 
-// function scene4(){
-//     inquirer.prompt([
-//         {
-//             type: "list",
-//             message: "Homebase call and asks if you need any reienforcements. Stock up on anything?",
-//             choices: ["We need more weapons", "We need more armor", "We need more camoflauge", "We don't want to waste any more time"],
-//             name: "backupChoice"
-//         }
-//     ]).then(function(response){
-//         if (response.backupChoice === "We need more weapons"){
-//             weapons += 30;
-//             timeOfDay += 20;
-//             console.log("Homebase sends a few more weapons to the team. Team waits for delivery.");
-//         }else if (response.backupChoice === "We need more armor"){
-//             armor += 30;
-//             timeOfDay += 20;
-//             console.log("Homebase sends a more armor to the team. Team waits for delivery.");
-//         }else if (response.backupChoice === "We need more camoflauge"){
-//             comfort += 30;
-//             timeOfDay += 20;
-//             console.log("Homebase sends camoflauge to the team. Team waits for delivery.");
-//         }else{
-//             console.log("The team bravely continues on without any additional help. No delays here!");
-//         };
-//         calcStats();
-//         outcome();
-//     });
-// }
+function scene4(){
+    $(".jbGame").html(
+        `<h1 class="action-title text-center">Homebase call and asks if you need any reienforcements. Do you need to stock up on anything?</h1>
+        <button class="choice" id="bu1">We need more weapons<button>
+        <button class="choice" id="bu2">We need more armor</button>
+        <button class="choice" id="bu3">We need more camoflauge</button>
+        <button class="choice" id="bu4">We don't need to waste anymore time</button>`
+    );
+    if (response.backupChoice === "We need more weapons"){
+        weapons += 30;
+        timeOfDay += 20;
+        console.log("Homebase sends a few more weapons to the team. Team waits for delivery.");
+    }else if (response.backupChoice === "We need more armor"){
+        armor += 30;
+        timeOfDay += 20;
+        console.log("Homebase sends a more armor to the team. Team waits for delivery.");
+    }else if (response.backupChoice === "We need more camoflauge"){
+        uncomfort -= 30;
+        timeOfDay += 20;
+        console.log("Homebase sends camoflauge to the team. Team waits for delivery.");
+    }else{
+        console.log("The team bravely continues on without any additional help. No delays here!");
+    };
+    calcStats();
+    outcome();
+}
 
 // function outcome(){
 //     if (stealth>0.9){
