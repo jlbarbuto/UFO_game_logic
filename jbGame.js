@@ -9,7 +9,7 @@ var uncomfort = -20;
 var armor = 10;
 var weapons = 10;
 var tools = 10;
-var timeOfDay = 10;
+var timeOfDay = 0;
 
 var stealth = 0;
 var defense = 0;
@@ -19,7 +19,7 @@ var charm = 0;
 function calcStats(){
     stealth = (-weight-timeOfDay-uncomfort+teamStealth)/100;
     defense = (armor-uncomfort+teamDefense-timeOfDay)/100;
-    offense = (weapons-uncomfort+teamDefense-timeOfDay)/100;
+    offense = (weapons-uncomfort+teamOffense-timeOfDay)/100;
     charm = (tools-uncomfort+teamCharm-timeOfDay)/100;
 
     console.log("stealth is " + stealth);
@@ -28,14 +28,13 @@ function calcStats(){
     console.log("charm is " + charm);
 };
 
-calcStats()
-
 $("#avenge").click(function(){
     team = "The Avengers";
     teamStealth = 10;
     teamDefense = 30;
     teamOffense = 40;
     teamCharm = 20;
+    calcStats();
     chooseWeapons();
 });
 
@@ -45,6 +44,7 @@ $("#justice").click(function(){
     teamDefense = 40;
     teamOffense = 30;
     teamCharm = 10;
+    calcStats();
     chooseWeapons();
 });
 
@@ -54,6 +54,7 @@ $("#super").click(function(){
     teamDefense = 20;
     teamOffense = 10;
     teamCharm = 30;
+    calcStats();
     chooseWeapons();
 });
 
@@ -63,6 +64,7 @@ $("#ghost").click(function(){
     teamDefense = 10;
     teamOffense = 20;
     teamCharm = 40;
+    calcStats();
     chooseWeapons();
 });
 
@@ -76,7 +78,8 @@ function chooseWeapons(){
         <button class="choice" id="w4">4</button>`
     );
 
-    $("w0").click(function(){
+    $("#w0").click(function(){
+        weight -=10;
         calcStats();
         chooseArmor();
     });
@@ -120,9 +123,10 @@ function chooseArmor(){
         <button class="choice" id="a4">4</button>`
     );
 
-    $("a0").click(function(){
+    $("#a0").click(function(){
+        weight -= 10;
         calcStats();
-        chooseArmor();
+        scene1();
     });
 
     $("#a1").click(function(){
@@ -175,7 +179,8 @@ function scene1(){
     });
 
     $("#r2").click(function(){
-        uncomfort += 30;
+        uncomfort += 10;
+        weight += 10;
         calcStats();
         $(".jbGame").html(
             `<h1 class="action-title text-center">The team bravely trudges through the river and comes out sopping wet and cold. Luckily, no time was wasted and no monsters were encountered!</h1>
@@ -189,7 +194,7 @@ function scene1(){
 
 function scene2(){
     $(".jbGame").html(
-        `<h1 class="action-title text-center">Directly in the path appears a mysterious, glowing box. What to do?</h1>
+        `<h1 class="action-title text-center">Directly in the path appears a mysterious, glowing box. WHAT'S IN THE BOX!?!?</h1>
         <button class="choice" id="b1">Open the box! It could hold a game winning tool!<button>
         <button class="choice" id="b2">Leave it alone. It smells funny.</button>`
     );
@@ -198,29 +203,37 @@ function scene2(){
         var rand = Math.random();
         console.log(rand);
         if (rand<.25){
-            console.log("hello1");
             $(".jbGame").html(
                 `<h1 class="action-title text-center">Ooo! Google translate! This might help us talk to any foreigners we might find.<h1>
                 <button class="continue">Continue</button>`
             );
             tools += 50;
             uncomfort -= 10;
+            $(".continue").click(function(){
+                calcStats();
+                scene3();
+            });
         }else if (rand<.5){
-            console.log("hello2");
             $(".jbGame").html(
                 `<h1 class="action-title text-center">Ooo! A nifty book of recipies! This might give us a casserole to offer any new friends we might find.<h1>
                 <button class="continue">Continue</button>`
             );
             tools += 30;
             uncomfort -= 10;
+            $(".continue").click(function(){
+                calcStats();
+                scene3();
+            });
         }else if (rand<.75){
-            console.log("hello3");
             $(".jbGame").html(
                 `<h1 class="action-title text-center">Ooo! A small beetle. Not sure how this is helpful....<h1>
                 <button class="continue">Continue</button>`
             );
+            $(".continue").click(function(){
+                calcStats();
+                scene3();
+            });
         }else{
-            console.log("hello4");
             $(".jbGame").html(
                 `<h1 class="action-title text-center">Oh boy. A neuralyzer. Your team spends an hour trying to remember where they're headed.<h1>
                 <button class="continue">Continue</button>`
@@ -228,10 +241,11 @@ function scene2(){
             uncomfort += 20;
             timeOfDay += 20;
             tools -= 10;
+            $(".continue").click(function(){
+                calcStats();
+                scene3();
+            });
         }
-        $(".continue").click(function(){
-            scene3();
-        });
     });
 
     $("#b2").click(function(){
@@ -252,39 +266,41 @@ function scene3(){
         <button class="choice" id="f2">Head straight to the steep slope.</button>
         <button class="choice" id="f3">Head left to toward the sinister mountain.</button>`
     );
-    if (stealth>.5){
-        $(".jbGame").html(
-            `<h1 class="action-title text-center">Your team ventures onward with very little interference.</h1>
-            <button class="continue">Continue</button>`
-        );
-        $(".continue").click(function(){
-            scene4();
-        });
-    }else if (weapons>.5){
-        $(".jbGame").html(
-            `<h1 class="action-title text-center">Your team ventures onward obliterating the dense bush they find around the corner.</h1>
-            <button class="continue">Continue</button>`
-        );
-        $(".continue").click(function(){
-            scene4();
-        });
-    }else if(armor>.5){
-        $(".jbGame").html(
-            `<h1 class="action-title text-center">Your team ventures onward and trips across some roots (how embarassing). Luckily, no one was hurt.</h1>
-            <button class="continue">Continue</button>`
-        );
-        $(".continue").click(function(){
-            scene4();
-        });
-    }else{
-        $(".jbGame").html(
-            `<h1 class="action-title text-center">Your team ventures forward narrowly avoiding a catastrophic trap of roots and bushes.</h1>
-            <button class="continue">Continue</button>`
-        );
-        $(".continue").click(function(){
-            scene4();
-        });
-    }
+    $(".choice").click(function(){
+        if (stealth>=.5){
+            $(".jbGame").html(
+                `<h1 class="action-title text-center">Your team ventures onward with very little interference.</h1>
+                <button class="continue">Continue</button>`
+            );
+            $(".continue").click(function(){
+                scene4();
+            });
+        }else if(offense>=.5){
+            $(".jbGame").html(
+                `<h1 class="action-title text-center">Your team ventures onward obliterating the dense bush they find around the corner.</h1>
+                <button class="continue">Continue</button>`
+            );
+            $(".continue").click(function(){
+                scene4();
+            });
+        }else if(defense>=.5){
+            $(".jbGame").html(
+                `<h1 class="action-title text-center">Your team ventures onward and trips across some roots (how embarassing). Luckily, no one was hurt.</h1>
+                <button class="continue">Continue</button>`
+            );
+            $(".continue").click(function(){
+                scene4();
+            });
+        }else{
+            $(".jbGame").html(
+                `<h1 class="action-title text-center">Your team ventures forward narrowly avoiding a catastrophic trap of roots and bushes.</h1>
+                <button class="continue">Continue</button>`
+            );
+            $(".continue").click(function(){
+                scene4();
+            });
+        }
+    });
 }
 
 function scene4(){
@@ -295,127 +311,183 @@ function scene4(){
         <button class="choice" id="bu3">We need more camoflauge</button>
         <button class="choice" id="bu4">We don't need to waste anymore time</button>`
     );
-    if (response.backupChoice === "We need more weapons"){
+
+    $("#bu1").click(function(){
         weapons += 30;
         timeOfDay += 20;
-        console.log("Homebase sends a few more weapons to the team. Team waits for delivery.");
-    }else if (response.backupChoice === "We need more armor"){
+        weight += 20;
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">Homebase sends a few more weapons to the team. Team waits for delivery.</h1>
+            <button class="continue">Continue to the UFO site</button>`
+        );
+        $(".continue").click(function(){
+            calcStats();
+            outcome();
+        });
+    });
+
+    $("#bu2").click(function(){
         armor += 30;
         timeOfDay += 20;
-        console.log("Homebase sends a more armor to the team. Team waits for delivery.");
-    }else if (response.backupChoice === "We need more camoflauge"){
+        weight += 20;
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">Homebase sends a more armor to the team. Team waits for delivery.</h1>
+            <button class="continue">Continue to the UFO site</button>`
+        );
+        $(".continue").click(function(){
+            calcStats();
+            outcome();
+        });
+    });
+
+    $("#bu3").click(function(){
         uncomfort -= 30;
         timeOfDay += 20;
-        console.log("Homebase sends camoflauge to the team. Team waits for delivery.");
-    }else{
-        console.log("The team bravely continues on without any additional help. No delays here!");
-    };
-    calcStats();
-    outcome();
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">Homebase sends camoflauge to the team. Team waits for delivery.</h1>
+            <button class="continue">Continue to the UFO site</button>`
+        );
+        $(".continue").click(function(){
+            calcStats();
+            outcome();
+        });
+    });
+ 
+    $("#bu4").click(function(){
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">The team bravely continues on without any additional help. No delays here!</h1>
+            <button class="continue">Continue to the UFO site</button>`
+        );
+        $(".continue").click(function(){
+            calcStats();
+            outcome();
+        });
+    });
 }
 
-// function outcome(){
-//     if (stealth>0.9){
-//         stealth = 0.9;
-//     }
-//     if (defense>0.9){
-//         defense = 0.9;
-//     }
-//     if (charm>0.9){
-//         charm = 0.9;
-//     }
-//     if (offense>0.9){
-//         offense = 0.9;
-//     }
-//     var rand = Math.random();
-//     console.log(rand);
-//     if (rand>0.1){
-//         console.log(team + " has made it to the UFO sighting");
-//         anythingThere();
-//     }else{
-//         console.log(team + " has failed to reach the UFO siting. Return home in shame.")
-//     }
-// }
+function outcome(){
+    if (stealth>0.9){
+        stealth = 0.9;
+    }
+    if (defense>0.9){
+        defense = 0.9;
+    }
+    if (charm>0.9){
+        charm = 0.9;
+    }
+    if (offense>0.9){
+        offense = 0.9;
+    }
+    var rand = Math.random();
+    console.log("hello" + rand);
+    if (rand>0.08){
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">The team has made it to the UFO site!</h1>
+            <button class="continue">Investigate the site</button>`
+        );
+        $(".continue").click(function(){
+            anythingThere();
+        });
+    }else{
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">The team has found their way into a dense forest and is hopelessly lost. They fail to reach the UFO site. Return home in shame.</h1>`
+        );
+    }
+}
 
-// function anythingThere(){
-//     var rand = Math.random();
-//     console.log(rand);
-//     if (rand>0.1){
-//         console.log(team + " has found aliens!");
-//         spotted();
-//     } else {
-//         var rand2 = Math.random();
-//         if (rand2>0.5){
-//             console.log("Nothing's here... Guess you should go home and report findings.");
-//         }else{
-//             console.log("There's one here but it looks like someone's definitely made a scene. Go home and report back evidence.");
-//         };
-//     };
-// };
+function anythingThere(){
+    var rand = Math.random();
+    console.log(rand);
+    if (rand>0.09){
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">Gasp! ${team} has found aliens!</h1>
+            <button class="continue">Sneak up on their landing site</button>`
+        );
+        $(".continue").click(function(){
+            spotted();
+        });
+    } else {
+        var rand2 = Math.random();
+        if (rand2>0.5){
+            console.log("Nothing's here... Guess you should go home and report findings.");
+            $(".jbGame").html(
+                `<h1 class="action-title text-center">Nothing's here... Guess ${team} should go home and report their findings.</h1>`
+            );
+        }else{
+            $(".jbGame").html(
+                `<h1 class="action-title text-center">There's no one here now, but it looks like someone's definitely made a disturbance. Go home and report back evidence.</h1>`
+            );
+        };
+    };
+};
 
-// function spotted(){
-//     var rand = Math.random();
-//     if (rand>.1){
-//         if(stealth>rand){
-//             console.log("Looks like you guys are flying under the radar. Snoop around undetected. Report back with cool photos and evidence!");
-//         }else{
-//             console.log("The aliens have spotted you! And they look pissed... What's the plan?");
-//             inquirer.prompt([
-//                 {
-//                     type: "list",
-//                     message: "Will you take the offense and start a fight or attempt to charm your way into their good graces?",
-//                     choices: ["Fight", "Negotiate"],
-//                     name: "usrDecision"
-//                 }
-//             ]).then(function(response){
-//                 if (response.usrDecision === "Fight"){
-//                     confrontation();
-//                 }else{
-//                     negotiate();
-//                 }
-//             });
-//         }
-//     }else{
-//         console.log("The aliens have spotted you! And they look pissed... What's the plan?");
-//         inquirer.prompt([
-//             {
-//                 type: "list",
-//                 message: "Will you take the offense and start a fight or attempt to charm your way into their good graces?",
-//                 choices: ["Fight", "Negotiate"],
-//                 name: "usrDecision"
-//             }
-//         ]).then(function(response){
-//             if (response.usrDecision === "Fight"){
-//                 confrontation();
-//             }else{
-//                 negotiate();
-//             }
-//         });
-//     };
-// };
+function spotted(){
+    var rand = Math.random();
+    if(stealth>rand){
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">Looks like the team is flying under the radar. Snoop around undetected. Report back with cool photos and evidence!</h1>`
+        );
+    }else{
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">The aliens have spotted you! ...ooo and they look pissed. What's the plan?</h1>
+            <button class="choice" id="s1">Fight<button>
+            <button class="choice" id="s2">Negotiate</button>`
+        );
 
-// function confrontation(){
-//     var rand = Math.random();
-//     console.log(rand);
-//     if (offense>rand){
-//         console.log("Woo! The team has kept the aliens at bay. Take time to explore and record evidence. Report back findings.")
-//     }else{
-//         console.log("Looks like the team has lost the fight... Tend to your injured and return home");
-//     };
-// };
+        $("#s1").click(function(){
+            calcStats();
+            confrontation();
+        });
+    
+        $("#s2").click(function(){
+            calcStats();
+            negotiate();
+        });
+    }
+};
 
-// function negotiate(){
-//     var rand = Math.random();
-//     console.log(rand);
-//     if (charm>rand){
-//         console.log("The team has charmed there way into the aliens' hearts. Return home with new fb friends.");
-//     }else{
-//         console.log("Oh no! The aliens don't look amused at your persuasion techniques... prepare defenses.");
-//         var rand2 = Math.random()
-//         if (defense>rand2){
-//             console.log("Your defenses are just enough. No time to take evidence, run home and hope eveyone believes your story.");
-//         }else{
-//             console.log("Your defenses are too weak. Your team is taken hostage.")
-//         };
-//     };
-// };
+function confrontation(){
+    var rand = Math.random();
+    console.log(rand);
+    if (offense>rand){
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">Woo! The team has kept the aliens at bay. Take time to explore and record evidence. Report back findings.</h1>`
+        );
+    }else{
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">Looks like the team has lost the fight... Tend to your injuries and return home.</h1>`
+        );
+    };
+};
+
+function negotiate(){
+    var rand = Math.random();
+    console.log(rand);
+    if (charm>rand){
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">${team} has charmed their way into the aliens' hearts. Return home with new fb friends.</h1>`
+        );
+    }else{
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">Uh oh! The aliens don't look amused at your persuasion techniques...</h1>
+            <button class="continue">Prepare defenses</button>`
+        );
+        $(".continue").click(function(){
+            prepare();
+        });
+    }
+}
+
+function prepare(){
+    var rand2 = Math.random()
+    if (defense>rand2){
+        console.log("Your defenses are just enough. No time to take evidence, run home and hope eveyone believes your story.");
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">Your defenses are just enough. No time to take evidence, run home and hope eveyone believes your story.</h1>`
+        );
+    }else{
+        $(".jbGame").html(
+            `<h1 class="action-title text-center">Your defenses are too weak. Your team is abducted.</h1>`
+        );
+    };
+};
