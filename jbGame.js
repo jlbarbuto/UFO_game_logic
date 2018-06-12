@@ -1,3 +1,4 @@
+var win = false;
 var team = "";
 var teamStealth = 0;
 var teamDefense = 0;
@@ -409,11 +410,12 @@ function anythingThere(){
     } else {
         var rand2 = Math.random();
         if (rand2>0.5){
-            console.log("Nothing's here... Guess you should go home and report findings.");
+            win = ture;
             $(".jbGame").html(
                 `<h1 class="action-title text-center">Nothing's here... Guess ${team} should go home and report their findings.</h1>`
             );
         }else{
+            win = true;
             $(".jbGame").html(
                 `<h1 class="action-title text-center">There's no one here now, but it looks like someone's definitely made a disturbance. Go home and report back evidence.</h1>`
             );
@@ -424,6 +426,7 @@ function anythingThere(){
 function spotted(){
     var rand = Math.random();
     if(stealth>rand){
+        win = true;
         $(".jbGame").html(
             `<h1 class="action-title text-center">Looks like the team is flying under the radar. Snoop around undetected. Report back with cool photos and evidence!</h1>`
         );
@@ -450,6 +453,7 @@ function confrontation(){
     var rand = Math.random();
     console.log(rand);
     if (offense>rand){
+        win = true;
         $(".jbGame").html(
             `<h1 class="action-title text-center">Woo! The team has kept the aliens at bay. Take time to explore and record evidence. Report back findings.</h1>`
         );
@@ -464,6 +468,7 @@ function negotiate(){
     var rand = Math.random();
     console.log(rand);
     if (charm>rand){
+        win = true;
         $(".jbGame").html(
             `<h1 class="action-title text-center">${team} has charmed their way into the aliens' hearts. Return home with new fb friends.</h1>`
         );
@@ -481,7 +486,7 @@ function negotiate(){
 function prepare(){
     var rand2 = Math.random()
     if (defense>rand2){
-        console.log("Your defenses are just enough. No time to take evidence, run home and hope eveyone believes your story.");
+        win = true;
         $(".jbGame").html(
             `<h1 class="action-title text-center">Your defenses are just enough. No time to take evidence, run home and hope eveyone believes your story.</h1>`
         );
@@ -491,3 +496,17 @@ function prepare(){
         );
     };
 };
+
+function save(){
+    $(".jbGame").html(
+        `<h1 class="action-title text-center">Save your game?.</h1>
+        <form>
+            <div class="form-group">
+                <label for="formGroupExampleInput">Enter Player Name</label>
+                <input type="text" class="form-control" id="playerName" placeholder="plyr1">
+            </div>
+            <button class="continue">Submit Game</button>
+        </form>
+        `
+    );
+}
